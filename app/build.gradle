@@ -16,6 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -122,5 +123,10 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:$playServicesVersion"
     implementation "com.google.android.gms:play-services-maps:$playServicesVersion"
 
+    // Firebase
+    implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
+
+    // Multidex
+    implementation 'com.android.support:multidex:1.0.3'
 
 }
