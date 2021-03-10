@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.udacity.project4.R
 import com.firebase.ui.auth.AuthUI
+import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.databinding.ActivityAuthenticationBinding
 import com.udacity.project4.locationreminders.RemindersActivity
 
@@ -17,22 +18,33 @@ import com.udacity.project4.locationreminders.RemindersActivity
  */
 class AuthenticationActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityAuthenticationBinding
+
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
                 startActivity(Intent(this, RemindersActivity::class.java))
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    R.string.log_in_to_use_the_app,
+                    Snackbar.LENGTH_LONG
+                )
+                    .setAction(R.string.login) { launchSignInFlow() }
+                    .show()
             }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = DataBindingUtil.setContentView<ActivityAuthenticationBinding>(
+        binding = DataBindingUtil.setContentView(
             this,
             R.layout.activity_authentication
         )
 
         launchSignInFlow()
-        binding.loginButton.setOnClickListener{
+
+        binding.loginButton.setOnClickListener {
             launchSignInFlow()
         }
 //         TODO: Implement the create account and sign in using FirebaseUI, use sign in using email and sign in using Google
