@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.udacity.project4.R
 import com.firebase.ui.auth.AuthUI
+import com.udacity.project4.databinding.ActivityAuthenticationBinding
 import com.udacity.project4.locationreminders.RemindersActivity
 
 /**
@@ -24,9 +26,15 @@ class AuthenticationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_authentication)
+        val binding = DataBindingUtil.setContentView<ActivityAuthenticationBinding>(
+            this,
+            R.layout.activity_authentication
+        )
 
         launchSignInFlow()
+        binding.loginButton.setOnClickListener{
+            launchSignInFlow()
+        }
 //         TODO: Implement the create account and sign in using FirebaseUI, use sign in using email and sign in using Google
 
 //          TODO: If the user was authenticated, send him to RemindersActivity
