@@ -23,6 +23,7 @@ import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
+import java.util.*
 
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     companion object {
@@ -74,9 +75,48 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         val homeLatLng = LatLng(latitude, longitude)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
 
-//        setPoiClick(map)
-//        setMapStyle(map)
+        setMapLongClick(map)
+        setPoiClick(map)
+        //setMapStyle(map)
         enableMyLocation()
+    }
+
+    private fun setMapLongClick(map: GoogleMap) {
+        map.setOnMapLongClickListener { latLng ->
+            // A Snippet is Additional text that's displayed below the title.
+            val snippet = String.format(
+                Locale.getDefault(),
+                getString(R.string.lat_long_snippet),
+                latLng.latitude,
+                latLng.longitude
+            )
+            map.addMarker(
+                MarkerOptions()
+                    .position(latLng)
+                    .title(getString(R.string.dropped_pin))
+                    .snippet(snippet)
+            )
+                .showInfoWindow()
+
+            viewModel.latitude.value = latLng.latitude
+            viewModel.longitude.value = latLng.longitude
+            viewModel.reminderSelectedLocationStr.value = getString(R.string.dropped_pin)
+        }
+    }
+
+    private fun setPoiClick(map: GoogleMap) {
+        map.setOnPoiClickListener { poi ->
+            val poiMarker = map.addMarker(
+                MarkerOptions()
+                    .position(poi.latLng)
+                    .title(poi.name)
+            )
+            poiMarker.showInfoWindow()
+
+            viewModel.latitude.value = poi.latLng.latitude
+            viewModel.longitude.value = poi.latLng.longitude
+            viewModel.reminderSelectedLocationStr.value = poi.name
+        }
     }
 
     private fun enableMyLocation() {
