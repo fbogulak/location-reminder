@@ -53,14 +53,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-//        TODO: add the map setup implementation
 //        TODO: zoom to the user location after taking his permission
 //        TODO: add style to the map
-//        TODO: put a marker to location that the user selected
 
-
-//        TODO: call this function after the user confirms on the selected location
-        onLocationSelected()
+        binding.saveButton.setOnClickListener {
+            onLocationSelected()
+        }
 
         return binding.root
     }
@@ -154,11 +152,16 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun onLocationSelected() {
-        viewModel.latitude.value = selectedLatitude
-        viewModel.longitude.value = selectedLongitude
-        viewModel.reminderSelectedLocationStr.value = selectedLocationStr
+        if (selectedLatitude != null && selectedLongitude != null && selectedLocationStr.isNotEmpty()) {
+            viewModel.latitude.value = selectedLatitude
+            viewModel.longitude.value = selectedLongitude
+            viewModel.reminderSelectedLocationStr.value = selectedLocationStr
 
-        viewModel.navigationCommand.value = NavigationCommand.Back
+            viewModel.navigationCommand.value = NavigationCommand.Back
+
+        } else {
+            viewModel.showToast.value = getString(R.string.select_location)
+        }
     }
 
 
