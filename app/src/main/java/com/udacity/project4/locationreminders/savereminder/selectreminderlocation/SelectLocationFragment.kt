@@ -2,23 +2,19 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.GroundOverlayOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
+import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
@@ -35,6 +31,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentSelectLocationBinding
 
     private lateinit var map: GoogleMap
+
+    private var selectedLatitude: Double? = null
+    private var selectedLongitude: Double? = null
+    private var selectedLocationStr = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -83,6 +83,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapLongClickListener { latLng ->
+            map.clear()
+
             // A Snippet is Additional text that's displayed below the title.
             val snippet = String.format(
                 Locale.getDefault(),
@@ -98,14 +100,16 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             )
                 .showInfoWindow()
 
-            viewModel.latitude.value = latLng.latitude
-            viewModel.longitude.value = latLng.longitude
-            viewModel.reminderSelectedLocationStr.value = getString(R.string.dropped_pin)
+            selectedLatitude = latLng.latitude
+            selectedLongitude = latLng.longitude
+            selectedLocationStr = getString(R.string.dropped_pin)
         }
     }
 
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
+            map.clear()
+
             val poiMarker = map.addMarker(
                 MarkerOptions()
                     .position(poi.latLng)
@@ -113,9 +117,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             )
             poiMarker.showInfoWindow()
 
-            viewModel.latitude.value = poi.latLng.latitude
-            viewModel.longitude.value = poi.latLng.longitude
-            viewModel.reminderSelectedLocationStr.value = poi.name
+            selectedLatitude = poi.latLng.latitude
+            selectedLongitude = poi.latLng.longitude
+            selectedLocationStr = poi.name
         }
     }
 
@@ -150,9 +154,11 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
+        viewModel.latitude.value = selectedLatitude
+        viewModel.longitude.value = selectedLongitude
+        viewModel.reminderSelectedLocationStr.value = selectedLocationStr
+
+        viewModel.navigationCommand.value = NavigationCommand.Back
     }
 
 
