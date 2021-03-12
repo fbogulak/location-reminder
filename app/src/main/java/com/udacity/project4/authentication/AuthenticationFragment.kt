@@ -5,27 +5,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.udacity.project4.R
 import com.udacity.project4.authentication.AuthenticationViewModel.AuthenticationState
+import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentAuthenticationBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AuthenticationFragment : Fragment() {
+class AuthenticationFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAuthenticationBinding
 
-    private val viewModel by viewModels<AuthenticationViewModel>()
+    override val viewModel: AuthenticationViewModel by viewModel()
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode != Activity.RESULT_OK) {
-                Toast.makeText(context, R.string.log_in_to_use_the_app, Toast.LENGTH_SHORT).show()
+                viewModel.showToast.postValue(getString(R.string.log_in_to_use_the_app))
             }
         }
 
