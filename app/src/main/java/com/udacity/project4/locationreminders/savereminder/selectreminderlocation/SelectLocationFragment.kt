@@ -27,6 +27,8 @@ import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 import java.util.*
 
+private const val TAG = "SelectLocationFragment"
+
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
@@ -133,10 +135,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             )
 
             if (!success) {
-                Log.e("SelectLocationFragment", "Style parsing failed.")
+                Log.e(TAG, "Style parsing failed.")
             }
         } catch (e: Resources.NotFoundException) {
-            Log.e("SelectLocationFragment", "Can't find style. Error: ", e)
+            Log.e(TAG, "Can't find style. Error: ", e)
         }
     }
 
