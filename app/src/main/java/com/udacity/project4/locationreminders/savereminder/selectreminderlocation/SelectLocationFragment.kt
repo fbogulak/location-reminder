@@ -159,6 +159,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                                 zoomLevel
                             )
                         )
+                        selectedLatitude = location.latitude
+                        selectedLongitude = location.longitude
+                        selectedLocationStr = getString(R.string.my_location)
                     }
                 }
 
