@@ -88,7 +88,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             // A Snippet is Additional text that's displayed below the title.
             val snippet = String.format(
                 Locale.getDefault(),
-                getString(R.string.lat_long_snippet),
+                getString(R.string.lat_long_format),
                 latLng.latitude,
                 latLng.longitude
             )
