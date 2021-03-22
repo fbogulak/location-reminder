@@ -2,12 +2,10 @@ package com.udacity.project4.locationreminders.reminderslist
 
 import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Transformations
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.udacity.project4.locationreminders.MainCoroutineRule
-import com.udacity.project4.locationreminders.data.FakeDataSource
-import com.udacity.project4.locationreminders.data.ReminderDataSource
+import com.udacity.project4.locationreminders.data.FakeTestDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,10 +15,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
-import org.koin.dsl.koinApplication
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
-import org.mockito.BDDMockito
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
@@ -33,7 +29,7 @@ class RemindersListViewModelTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     // Use a fake data source to be injected into the viewmodel
-    private lateinit var dataSource: FakeDataSource
+    private lateinit var dataSource: FakeTestDataSource
 
     // Subject under test
     private lateinit var viewModel: RemindersListViewModel
@@ -51,7 +47,7 @@ class RemindersListViewModelTest {
     @Before
     fun setupViewModel() {
         stopKoin()
-        dataSource = FakeDataSource(reminders.toMutableList())
+        dataSource = FakeTestDataSource(reminders.toMutableList())
         viewModel =
             RemindersListViewModel(ApplicationProvider.getApplicationContext(), dataSource)
     }
