@@ -95,7 +95,7 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
     }
 
     @Test
-    fun errorLoadingReminders_snackbarDisplayedInUi(){
+    fun errorLoadingReminders_snackbarDisplayedInUi() {
         // Given error loading reminders from DB
         dataSource.setReturnError(true)
 
@@ -104,7 +104,7 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
 
         // Then snackbar with error message is displayed
         onView(withId(com.google.android.material.R.id.snackbar_text)).check(matches(isDisplayed()))
-
+        onView(withId(com.google.android.material.R.id.snackbar_text)).check(matches(withText("Test error")))
     }
 
 }
