@@ -4,7 +4,7 @@ Location reminder app sends a notification when a user enters certain area. The 
 ## Instalation
 Clone this repository and import into **Android Studio**
 ```
-git clone https://github.com/and-hub/location-reminder.git
+git clone https://github.com/fbogulak/location-reminder.git
 ```
 
 ## API key
